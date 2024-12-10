@@ -1,5 +1,5 @@
 {
-	"name": "relational",
+	"name": "@neokit-dev/relational",
 	"version": "1.0.0",
 	"scripts": {
 		"dev": "vite dev",
