@@ -1,3 +1,10 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+  export let data;
+</script>
+
+<h1>Plugin test</h1>
+
+<h2>Test 1</h2>
+
+<p>Should be: [&lcub;"query":"SELECT * FROM table1 WHERE id = 'abcd'"&rcub;]</p>
+<p>Is: {JSON.stringify(data.result)}</p>
