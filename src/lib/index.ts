@@ -3,11 +3,11 @@ import sqlstring from 'sqlstring';
 
 export const id = 'dev.neokit.relational';
 export const defaultNamespace = 'relational';
-export const apiVersion = 2;
-export const version = 1;
+export const apiVersion = 3;
+export const version = 2;
 
 export class RelationalPlugin {
-	queryFn: (query: string) => Promise<Record<string, unknown>[]>;
+	queryFn?: (query: string) => Promise<Record<string, unknown>[]>;
 	stringifyObjects: boolean;
 	timezone: string;
 
@@ -18,12 +18,12 @@ export class RelationalPlugin {
 	}
 
 	query(q: string, ...p: unknown[]): Promise<Record<string, unknown>[]> {
-		return this.queryFn(sqlstring.format(q, p, this.stringifyObjects, this.timezone));
+		return (this.queryFn ?? (() => Promise.resolve([])))(sqlstring.format(q, p, this.stringifyObjects, this.timezone));
 	}
 }
 
 export interface RelationalPluginOptions extends PluginOptions {
-	queryFn: (query: string) => Promise<Record<string, unknown>[]>;
+	queryFn?: (query: string) => Promise<Record<string, unknown>[]>;
 	stringifyObjects?: boolean;
 	timezone?: string;
 }
@@ -34,7 +34,7 @@ export function plugin(options: RelationalPluginOptions): Plugin {
 		version,
 		apiVersion,
 		plugin: new RelationalPlugin(options),
-		...defaultPluginOptions(options, { namespace: defaultNamespace })
+		...defaultPluginOptions(options, { namespace: defaultNamespace, allowInjection: true })
 	};
 }
 
@@ -43,5 +43,5 @@ export function query(q: string, ...p: unknown[]): Promise<Record<string, unknow
 }
 
 export function namespace(namespace: string): RelationalPlugin {
-  return access(id)[namespace].plugin as RelationalPlugin;
+	return access(id)[namespace].plugin as RelationalPlugin;
 }

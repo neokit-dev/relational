@@ -1,6 +1,7 @@
 import { plugin, query } from '$lib/index.js';
-import { load as loadPlugin } from '@neokit-dev/core';
+import { init, load as loadPlugin } from '@neokit-dev/core';
 
+init();
 loadPlugin(plugin({
   queryFn: async (query: string): Promise<Record<string, unknown>[]> => {
     return [{ query }]; // not really a database, but you get the idea
